@@ -1,79 +1,18 @@
-package AnyData2;
+package AnyData2::MetaStorage;
 
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
+use base 'AnyData2::Storage';
+
 =head1 NAME
 
-AnyData2 - access to data in many formats
+AnyData2::MetaStorage - provides meta storage in AnyData2
 
 =cut
 
 our $VERSION = '0.001';
-
-=head1 SYNOPSIS
-
-    use AnyData2 ();
-
-    my $ad = AnyData2->new( $src_format => { %src_format_flags },
-                            $src_storage => { %src_storage_flags } );
-    my $ad_out = AnyData2->new( $tgt_format => { %tgt_format_flags },
-                                $tgt_storage => { %tgt_storage_flags } );
-    while( my $datum = $ad->read ) {
-        $ad_out->write( $datum );
-    }
-
-=head1 METHODS
-
-=head2 new
-
-=cut
-
-sub new
-{
-}
-
-=head1 AUTHOR
-
-Jens Rehsack, C<< <rehsack at cpan.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-anydata2 at rt.cpan.org>,
-or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=AnyData2>.
-I will be notified, and then you'll automatically be notified of progress
-on your bug as I make changes.
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc AnyData2
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyData2>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/AnyData2>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/AnyData2>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/AnyData2/>
-
-=back
-
-=head1 ACKNOWLEDGEMENTS
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -112,4 +51,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1; # End of AnyData2
+1;

@@ -1,4 +1,4 @@
-package AnyData2;
+package AnyData2::Storage;
 
 use 5.006;
 use strict;
@@ -6,27 +6,21 @@ use warnings FATAL => 'all';
 
 =head1 NAME
 
-AnyData2 - access to data in many formats
+AnyData2::Storage - AnyData2 storage base class
 
 =cut
 
 our $VERSION = '0.001';
 
-=head1 SYNOPSIS
-
-    use AnyData2 ();
-
-    my $ad = AnyData2->new( $src_format => { %src_format_flags },
-                            $src_storage => { %src_storage_flags } );
-    my $ad_out = AnyData2->new( $tgt_format => { %tgt_format_flags },
-                                $tgt_storage => { %tgt_storage_flags } );
-    while( my $datum = $ad->read ) {
-        $ad_out->write( $datum );
-    }
-
 =head1 METHODS
 
+AnyData2::Storage is intended to handle the data I/O for L<AnyData2::Format>s.
+Thus implies, an C<AnyData2::Format> instance has requirements for it's
+storage backend. Not every tuple might work well together.
+
 =head2 new
+
+constructs a storage.
 
 =cut
 
@@ -34,46 +28,100 @@ sub new
 {
 }
 
-=head1 AUTHOR
+=head2 read
 
-Jens Rehsack, C<< <rehsack at cpan.org> >>
+  my $buf = $stor->read(<characters>)
 
-=head1 BUGS
+Use binmode for characters as synonymous for bytes.
 
-Please report any bugs or feature requests to C<bug-anydata2 at rt.cpan.org>,
-or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=AnyData2>.
-I will be notified, and then you'll automatically be notified of progress
-on your bug as I make changes.
+=cut
 
-=head1 SUPPORT
+sub read
+{
+}
 
-You can find documentation for this module with the perldoc command.
+=head2 read_record
 
-    perldoc AnyData2
+  my $buf = $stor->read_record
 
-You can also look for information at:
+Reads a record from storage - could be a line for text-files, a block for
+an archive, a row for a database, ...
 
-=over 4
+=cut
 
-=item * RT: CPAN's request tracker (report bugs here)
+sub read_record
+{
+}
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyData2>
+=head2 write
 
-=item * AnnoCPAN: Annotated CPAN documentation
+  $stor->write($buf)
 
-L<http://annocpan.org/dist/AnyData2>
+Writes the buf out
 
-=item * CPAN Ratings
+=cut
 
-L<http://cpanratings.perl.org/d/AnyData2>
+sub write
+{
+}
 
-=item * Search CPAN
+=head2 write_record
 
-L<http://search.cpan.org/dist/AnyData2/>
+  $stor->write_record($buf)
 
-=back
+=cut
 
-=head1 ACKNOWLEDGEMENTS
+sub write_record
+{
+}
+
+=head2 seek
+
+  $stor->seek(<pos>, [<whence>])
+
+The C<SEEK_*> constants can be imported from the L<Fcntl> module if you
+don't wish to use the numbers 0 1 or 2 in your code.
+
+=cut
+
+sub seek
+{
+}
+
+=head2 rewind
+
+  $stor->rewind
+
+This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
+
+=cut
+
+sub rewind
+{
+}
+
+=head2 truncate
+
+  $stor->truncate
+
+Truncates the underlying storage backend at it's current position.
+
+=cut
+
+sub truncate
+{
+}
+
+=head2 meta
+
+Returns a meta storage - if any. Imaging it as an object dealing with
+underlying filesystem for a file storage.
+
+=cut
+
+sub meta
+{
+}
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -112,4 +160,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1; # End of AnyData2
+1;
