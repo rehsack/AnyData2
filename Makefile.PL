@@ -6,6 +6,9 @@ use 5.008001;
 use ExtUtils::MakeMaker;
 
 my %RUN_DEPS = (
+    'Carp'            => 0,
+    'List::MoreUtils' => 0,
+    'Module::Runtime' => 0,
 );
 my %CONFIGURE_DEPS = (
     'ExtUtils::MakeMaker' => 0,
@@ -13,11 +16,13 @@ my %CONFIGURE_DEPS = (
 my %BUILD_DEPS = ();
 
 my %TEST_DEPS = (
-    'Test::More' => 0.90,
+    'Test::More'   => 0.90,
+    'Text::CSV_XS' => 0,
+    'IO::File'     => 0,
 );
 
 WriteMakefile1(
-    META_ADD         => {
+    META_ADD => {
         'meta-spec' => { version => 2 },
         resources   => {
             homepage   => 'https://metacpan.org/release/AnyData2',
@@ -52,10 +57,11 @@ WriteMakefile1(
             test    => { requires => {%TEST_DEPS} },
             runtime => {
                 recommends => {
+                    'Text::CSV'    => 0,
+                    'Text::CSV_XS' => 0,
+                    'IO::File'     => 0,
                 },
-                requires => {
-                    %RUN_DEPS,
-                },
+                requires => { %RUN_DEPS, },
             },
         },
     },
@@ -66,11 +72,14 @@ WriteMakefile1(
     LICENSE          => 'perl',
     PL_FILES         => {},
     MIN_PERL_VERSION => 5.006,
-    PREREQ_PM      => \%RUN_DEPS,
-    BUILD_REQUIRES => \%BUILD_DEPS,
-    TEST_REQUIRES  => \%TEST_DEPS,
-    test           => { TESTS => 't/*.t xt/*.t' },
-    dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    PREREQ_PM        => \%RUN_DEPS,
+    BUILD_REQUIRES   => \%BUILD_DEPS,
+    TEST_REQUIRES    => \%TEST_DEPS,
+    test             => { TESTS => 't/*.t xt/*.t' },
+    dist             => {
+        COMPRESS => 'gzip -9f',
+        SUFFIX   => 'gz',
+    },
     clean => { FILES => 'AnyData2-*' },
 );
 
