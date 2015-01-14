@@ -1,14 +1,16 @@
-package AnyData2::Format;
+package AnyData2::Storage::File::Linewise;
 
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use Carp 'confess';
+use base qw(AnyData2::Storage::File);
+
+use IO::File ();
 
 =head1 NAME
 
-AnyData2::Format - Format base class for AnyData2
+AnyData2::Storage::File::Linewise - AnyData2 file storage ...
 
 =cut
 
@@ -16,57 +18,37 @@ our $VERSION = '0.001';
 
 =head1 METHODS
 
-AnyData2::Format is intended to handle the data structures for
-AnyData2.
-
-=head2 new
-
-constructs a storage.
-
-=cut
-
-sub new
-{
-    my ( $class, $storage ) = @_;
-    bless { storage => $storage }, $class;
-}
+...
 
 =head2 read
+
+  my $buf = $stor->read(<characters>)
+
+Use binmode for characters as synonymous for bytes.
 
 =cut
 
 sub read
 {
-    confess "missing overwritten method";
+    my $self = shift;
+    my $buf  = $self->{fh}->getline;
+    defined $buf or die "Can't read from $self->{filename}: $!";
+    chomp $buf;
+    $buf;
 }
 
 =head2 write
+
+  $stor->write($buf)
+
+Writes the buf out
 
 =cut
 
 sub write
 {
-    confess "missing overwritten method";
-}
-
-=head2 rewind
-
-=cut
-
-sub rewind
-{
-    my $self = shift;
-    $self->{storage}->rewind();
-}
-
-=head2 truncate
-
-=cut
-
-sub truncate
-{
-    my $self = shift;
-    $self->{storage}->truncate();
+    my ( $self, $buf ) = @_;
+    $self->{fh}->say($buf) or die "Can't write to $self->{filename}: $!";
 }
 
 =head1 LICENSE AND COPYRIGHT

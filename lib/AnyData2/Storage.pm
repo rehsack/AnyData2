@@ -4,6 +4,8 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
+use Carp 'confess';
+
 =head1 NAME
 
 AnyData2::Storage - AnyData2 storage base class
@@ -26,6 +28,8 @@ constructs a storage.
 
 sub new
 {
+    my ( $class, $storage ) = @_;
+    bless {}, $class;
 }
 
 =head2 read
@@ -38,19 +42,7 @@ Use binmode for characters as synonymous for bytes.
 
 sub read
 {
-}
-
-=head2 read_record
-
-  my $buf = $stor->read_record
-
-Reads a record from storage - could be a line for text-files, a block for
-an archive, a row for a database, ...
-
-=cut
-
-sub read_record
-{
+    confess "missing overwritten method";
 }
 
 =head2 write
@@ -63,29 +55,7 @@ Writes the buf out
 
 sub write
 {
-}
-
-=head2 write_record
-
-  $stor->write_record($buf)
-
-=cut
-
-sub write_record
-{
-}
-
-=head2 seek
-
-  $stor->seek(<pos>, [<whence>])
-
-The C<SEEK_*> constants can be imported from the L<Fcntl> module if you
-don't wish to use the numbers 0 1 or 2 in your code.
-
-=cut
-
-sub seek
-{
+    confess "missing overwritten method";
 }
 
 =head2 rewind
@@ -98,6 +68,7 @@ This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
 
 sub rewind
 {
+    confess "missing overwritten method";
 }
 
 =head2 truncate
@@ -110,6 +81,7 @@ Truncates the underlying storage backend at it's current position.
 
 sub truncate
 {
+    confess "missing overwritten method";
 }
 
 =head2 meta
@@ -121,6 +93,7 @@ underlying filesystem for a file storage.
 
 sub meta
 {
+    confess "missing overwritten method";
 }
 
 =head1 LICENSE AND COPYRIGHT

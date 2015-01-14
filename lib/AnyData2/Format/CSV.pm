@@ -1,14 +1,14 @@
-package AnyData2::Format;
+package AnyData2::Format::CSV;
 
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use Carp 'confess';
+use base qw(AnyData2::Format AnyData2::Role::GuessImplementation);
 
 =head1 NAME
 
-AnyData2::Format - Format base class for AnyData2
+AnyData2::Format::CSV - Format base class for AnyData2
 
 =cut
 
@@ -16,19 +16,23 @@ our $VERSION = '0.001';
 
 =head1 METHODS
 
-AnyData2::Format is intended to handle the data structures for
-AnyData2.
-
 =head2 new
 
-constructs a storage.
+constructs a storage, passes all options down to C<csv_class> beside
+C<csv_class>, which is used to instantiate the parser. C<csv_class>
+prefers L<Text::CSV_XS> over L<Text::CSV> by default.
 
 =cut
 
 sub new
 {
-    my ( $class, $storage ) = @_;
-    bless { storage => $storage }, $class;
+    my ( $class, $storage, %options ) = @_;
+    my $csv_class = delete $options{csv_class};
+    defined $csv_class or $csv_class = $class->_guess_suitable_class(qw(Text::CSV_XS Text::CSV));
+    my $csv = $csv_class->new( {%options} );
+    my $self = $class->SUPER::new($storage);
+    $self->{csv} = $csv;
+    $self;
 }
 
 =head2 read
@@ -37,7 +41,11 @@ sub new
 
 sub read
 {
-    confess "missing overwritten method";
+    my $self = shift;
+    my $buf  = $self->{storage}->read();
+    my $stat = $self->{csv}->parse($buf);
+    $stat or return $self->_handle_error( $self->{csv}->error_diag );
+    [ $self->{csv}->fields ];
 }
 
 =head2 write
@@ -46,27 +54,10 @@ sub read
 
 sub write
 {
-    confess "missing overwritten method";
-}
-
-=head2 rewind
-
-=cut
-
-sub rewind
-{
-    my $self = shift;
-    $self->{storage}->rewind();
-}
-
-=head2 truncate
-
-=cut
-
-sub truncate
-{
-    my $self = shift;
-    $self->{storage}->truncate();
+    my ( $self, $fields ) = @_;
+    my $stat = $self->{csv}->combine(@$fields);
+    $stat or return $self->_handle_error( $self->{csv}->error_diag );
+    $self->{storage}->write( $self->{csv}->string );
 }
 
 =head1 LICENSE AND COPYRIGHT

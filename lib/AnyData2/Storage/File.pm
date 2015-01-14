@@ -1,94 +1,93 @@
-package AnyData2;
+package AnyData2::Storage::File;
 
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
+use base qw(AnyData2::Storage);
+
+use Fcntl qw(:seek);
+use IO::File ();
 use Module::Runtime qw(require_module);
 
 =head1 NAME
 
-AnyData2 - access to data in many formats
+AnyData2::Storage::File - AnyData2 file storage ...
 
 =cut
 
 our $VERSION = '0.001';
 
-=head1 SYNOPSIS
-
-    use AnyData2 ();
-
-    my $ad = AnyData2->new( $src_format => { %src_format_flags },
-                            $src_storage => { %src_storage_flags } );
-    my $ad_out = AnyData2->new( $tgt_format => { %tgt_format_flags },
-                                $tgt_storage => { %tgt_storage_flags } );
-    while( my $datum = $ad->read ) {
-        $ad_out->write( $datum );
-    }
-
-=head1 DESCRIPTION
-
-The rather wacky idea behind this module is that any data, regardless of
-source or format should be accessible and maybe modifiable with the same
-simple set of methods.
-
 =head1 METHODS
 
+...
+
 =head2 new
+
+constructs a storage.
 
 =cut
 
 sub new
 {
-    my ( $class, $fmt, $fmt_flags, $stor, $stor_flags ) = @_;
-    $stor =~ m/^AnyData2::Storage::/ or $stor = "AnyData2::Storage::" . $stor;
-    $fmt =~ m/^AnyData2::Format::/   or $fmt  = "AnyData2::Format::" . $fmt;
-    require_module($stor);
-    require_module($fmt);
-    my $s = $stor->new(%$stor_flags);
-    $fmt->new( $s, %$fmt_flags );
+    my ( $class, %options ) = @_;
+    my $self = $class->SUPER::new();
+    defined $options{filemode} or $options{filemode} = "r";
+    defined $options{fileperms} or $options{fileperms} = 0644;
+    $self->{fh} = IO::File->new( @options{qw(filename filemode fileperms)} ) or die "Can't open $options{filename}: $!";
+    @$self{qw(filename filemode fileperms)} = @options{qw(filename filemode fileperms)};
+    $self;
 }
 
-=head1 AUTHOR
+=head2 rewind
 
-Jens Rehsack, C<< <rehsack at cpan.org> >>
+  $stor->rewind
 
-=head1 BUGS
+This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
 
-Please report any bugs or feature requests to C<bug-anydata2 at rt.cpan.org>,
-or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=AnyData2>.
-I will be notified, and then you'll automatically be notified of progress
-on your bug as I make changes.
+=cut
 
-=head1 SUPPORT
+sub rewind
+{
+    my $self = shift;
+    $self->{fh}->seek( 0, SEEK_SET ) or die "Can't rewind $self->{filename}: $!";
+    "0E0";
+}
 
-You can find documentation for this module with the perldoc command.
+=head2 truncate
 
-    perldoc AnyData2
+  $stor->truncate
 
-You can also look for information at:
+Truncates the underlying storage backend at it's current position.
 
-=over 4
+=cut
 
-=item * RT: CPAN's request tracker (report bugs here)
+sub truncate
+{
+    my $self = shift;
+    $self->{fh}->truncate( $self->{fh}->tell() ) or die "Can't truncate $self->{filename}: $!";
+}
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyData2>
+=head2 meta
 
-=item * AnnoCPAN: Annotated CPAN documentation
+Returns a meta storage - if any. Imaging it as an object dealing with
+underlying filesystem for a file storage.
 
-L<http://annocpan.org/dist/AnyData2>
+=cut
 
-=item * CPAN Ratings
+sub _build_meta
+{
+    my $self = shift;
+    require_module("AnyData2::Format::FileSystem");
+    AnyData2::Format::FileSystem->new( dirname => dirname( $self->{filename} ) );
+}
 
-L<http://cpanratings.perl.org/d/AnyData2>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/AnyData2/>
-
-=back
-
-=head1 ACKNOWLEDGEMENTS
+sub meta
+{
+    my $self = shift;
+    $self->{meta} or $self->{meta} = $self->_build_meta;
+    $self->{meta};
+}
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -127,4 +126,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1;    # End of AnyData2
+1;

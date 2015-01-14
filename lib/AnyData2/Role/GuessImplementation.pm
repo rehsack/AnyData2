@@ -1,94 +1,41 @@
-package AnyData2;
+package AnyData2::Role::GuessImplementation;
 
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
+use base "Exporter";
+our @EXPORT = "_guess_suitable_class";
+
+use Carp qw/croak/;
+use List::MoreUtils qw(firstval);
 use Module::Runtime qw(require_module);
 
 =head1 NAME
 
-AnyData2 - access to data in many formats
+AnyData2::Role::GuessImplementation - provides role for guessing suitable implementation
 
 =cut
 
 our $VERSION = '0.001';
 
-=head1 SYNOPSIS
-
-    use AnyData2 ();
-
-    my $ad = AnyData2->new( $src_format => { %src_format_flags },
-                            $src_storage => { %src_storage_flags } );
-    my $ad_out = AnyData2->new( $tgt_format => { %tgt_format_flags },
-                                $tgt_storage => { %tgt_storage_flags } );
-    while( my $datum = $ad->read ) {
-        $ad_out->write( $datum );
-    }
-
-=head1 DESCRIPTION
-
-The rather wacky idea behind this module is that any data, regardless of
-source or format should be accessible and maybe modifiable with the same
-simple set of methods.
-
 =head1 METHODS
 
-=head2 new
+=head2 _guess_suitable_class(@suitables)
+
+Finds first suitable class from C<@suitables>. Results are cached.
 
 =cut
 
-sub new
+my %suitable_classes;
+
+sub _guess_suitable_class
 {
-    my ( $class, $fmt, $fmt_flags, $stor, $stor_flags ) = @_;
-    $stor =~ m/^AnyData2::Storage::/ or $stor = "AnyData2::Storage::" . $stor;
-    $fmt =~ m/^AnyData2::Format::/   or $fmt  = "AnyData2::Format::" . $fmt;
-    require_module($stor);
-    require_module($fmt);
-    my $s = $stor->new(%$stor_flags);
-    $fmt->new( $s, %$fmt_flags );
+    my ( $class, @classlist ) = @_;
+    $suitable_classes{$class} or $suitable_classes{$class} = firstval { eval { require_module($_); } } @classlist;
+    $suitable_classes{$class} or croak( "No suitable class out of (" . join( ", ", @classlist ) . ")for $class available" );
+    $suitable_classes{$class};
 }
-
-=head1 AUTHOR
-
-Jens Rehsack, C<< <rehsack at cpan.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-anydata2 at rt.cpan.org>,
-or through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=AnyData2>.
-I will be notified, and then you'll automatically be notified of progress
-on your bug as I make changes.
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc AnyData2
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyData2>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/AnyData2>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/AnyData2>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/AnyData2/>
-
-=back
-
-=head1 ACKNOWLEDGEMENTS
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -127,4 +74,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1;    # End of AnyData2
+1;
