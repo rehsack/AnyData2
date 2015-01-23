@@ -1,16 +1,17 @@
-package AnyData2::Storage::FileSystem;
+package AnyData2::Format::FileSystem;
 
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use base qw(AnyData2::Storage);
+use base qw(AnyData2::Format);
 
-use IO::Dir ();
+use Carp 'confess';
+use File::stat;
 
 =head1 NAME
 
-AnyData2::Storage::FileSystem - AnyData2 file storage ...
+AnyData2::Format::FileSystem - FileSystem format class for AnyData2
 
 =cut
 
@@ -18,63 +19,50 @@ our $VERSION = '0.001';
 
 =head1 METHODS
 
-...
-
 =head2 new
 
-constructs a storage.
+constructs a filesystem format
 
 =cut
 
 sub new
 {
-    my ( $class, %options ) = @_;
-    my $self = $class->SUPER::new();
-    $self->{dirh} = IO::Dir->new( $options{dirname} ) or die "Can't open $options{dirname}";
-    @$self{qw(dirname)} = @options{qw(dirname)};
+    my ( $class, $storage, %options ) = @_;
+    my $self = $class->SUPER::new($storage);
+
+    $self->{fs_cols} = [ qw(dev ino mode nlink uid gid rdev size atime mtime ctime blksize blocks) ];
+
     $self;
 }
 
+=head2 cols
+
+=cut
+
+sub cols
+{
+    my $self = shift;
+    defined $self->{fs_cols} or confess "Should not been here ...";
+    $self->{fs_cols};
+}
+
 =head2 read
-
-  my $buf = $stor->read(<characters>)
-
-Use binmode for characters as synonymous for bytes.
 
 =cut
 
 sub read
 {
     my $self = shift;
-    $self->{dirh}->read;
+    [ $self->{storage}->read() ];
 }
 
-=head2 rewind
-
-  $stor->rewind
-
-This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
+=head2 write
 
 =cut
 
-sub rewind
+sub write
 {
-    my $self = shift;
-    $self->{dirh}->rewind;
-}
-
-=head2 meta
-
-Returns a meta storage - if any. Imaging it as an object dealing with
-underlying filesystem for a file storage.
-
-=cut
-
-sub meta
-{
-    my $self = shift;
-    $self->{meta} or $self->{meta} = AnyData2::Format::FileSystem->new( dirname => dirname( $self->{dirname} ) );
-    $self->{meta};
+    confess "read-only format ...";
 }
 
 =head1 LICENSE AND COPYRIGHT
@@ -115,3 +103,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 =cut
 
 1;
+
