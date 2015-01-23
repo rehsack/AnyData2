@@ -6,9 +6,11 @@ use warnings FATAL => 'all';
 
 use base qw(AnyData2::Format AnyData2::Role::GuessImplementation);
 
+use Carp 'confess';
+
 =head1 NAME
 
-AnyData2::Format::CSV - Format base class for AnyData2
+AnyData2::Format::CSV - CSV format class for AnyData2
 
 =cut
 
@@ -18,21 +20,50 @@ our $VERSION = '0.001';
 
 =head2 new
 
-constructs a storage, passes all options down to C<csv_class> beside
-C<csv_class>, which is used to instantiate the parser. C<csv_class>
-prefers L<Text::CSV_XS> over L<Text::CSV> by default.
+constructs a CSV accessor, passes all options down to C<csv_class> beside
+C<csv_class>, C<csv_cols> and C<csv_skip_first_row>. C<csv_class> is used
+to instantiate the parser and prefers L<Text::CSV_XS> over L<Text::CSV>
+by default.  When C<csv_skip_first_row> is set to a true value, the first
+line of the csv isn't used to guess the names in C<csv_cols>. Specifying
+C<csv_cols> always wins over any value of C<csv_skip_first_row>.
 
 =cut
 
 sub new
 {
     my ( $class, $storage, %options ) = @_;
-    my $csv_class = delete $options{csv_class};
-    defined $csv_class or $csv_class = $class->_guess_suitable_class(qw(Text::CSV_XS Text::CSV));
-    my $csv = $csv_class->new( {%options} );
     my $self = $class->SUPER::new($storage);
+
+    my $csv_class = delete $options{csv_class};
+    my $csv_skip_first_row = delete $options{csv_skip_first_row};
+
+    defined $csv_class or $csv_class = $class->_guess_suitable_class(qw(Text::CSV_XS Text::CSV));
+
+    my $csv = $csv_class->new( {%options} );
     $self->{csv} = $csv;
+
+    $self->cols unless ( defined $csv_skip_first_row and $csv_skip_first_row );
+
     $self;
+}
+
+sub _handle_error
+{
+    my ($self, $code, $str, $pos, $rec, $fld) = @_;
+    defined $pos and defined $rec and defined $fld and confess "record $rec at line $pos in $fld - $code - $str";
+    defined $pos and defined $rec and confess "record $rec at line $pos - $code - $str";
+    confess "$code - $str";
+}
+
+=head2 cols
+
+=cut
+
+sub cols
+{
+    my $self = shift;
+    defined $self->{csv_cols} and return $self->{csv_cols};
+    $self->{csv_cols} = $self->read;
 }
 
 =head2 read

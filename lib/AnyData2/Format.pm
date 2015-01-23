@@ -31,6 +31,15 @@ sub new
     bless { storage => $storage }, $class;
 }
 
+=head2 cols
+
+=cut
+
+sub cols
+{
+    confess "missing overwritten method";
+}
+
 =head2 read
 
 =cut
