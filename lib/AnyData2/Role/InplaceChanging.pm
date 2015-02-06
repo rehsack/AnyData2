@@ -1,14 +1,14 @@
-package AnyData2::Format;
+package AnyData2::Role::InplaceChanging;
 
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use Carp 'confess';
+use Carp qw/croak/;
 
 =head1 NAME
 
-AnyData2::Format - Format base class for AnyData2
+AnyData2::Role::InplaceChanging - provides role for in-place changing capabilities
 
 =cut
 
@@ -16,67 +16,39 @@ our $VERSION = '0.001';
 
 =head1 METHODS
 
-AnyData2::Format is intended to handle the data structures for
-AnyData2.
+In fact, this role doesn't export anything. It's intended for C<< ->DOES() >>
+and documenting the reasonable methods one should implement when doing
+C<AnyData2::Role::InplaceChanging>.
 
-=head2 new
+=head2 insert_new_row
 
-constructs a storage.
+Defines if a format can easily insert a new row without need to seek
+or truncate. This capability is provided by defining the class method
+C<insert_new_row>.
 
-=cut
+=head2 delete_one_row
 
-sub new
-{
-    my ( $class, $storage ) = @_;
-    bless { storage => $storage }, $class;
-}
+Defines whether the format can delete one single row by it's content or not.
 
-=head2 cols
+=head2 delete_current_row
 
-=cut
+Defines whether a table can delete the current traversed row or not.
 
-sub cols
-{
-    confess "missing overwritten method";
-}
+=head2 update_one_row
 
-=head2 fetchrow
+Defines whether the format is able to update one single row. This
+capability is used for backward compatibility and might have
+(depending on table implementation) several limitations. Please
+carefully study the documentation of the format or ask the author of
+the format, if this information is not provided.
 
-=cut
+=head2 update_current_row
 
-sub fetchrow
-{
-    confess "missing overwritten method";
-}
+Defines if the format is able to update the currently touched row.
 
-=head2 pushrow
+=head2 update_specific_row
 
-=cut
-
-sub pushrow
-{
-    confess "missing overwritten method";
-}
-
-=head2 rewind
-
-=cut
-
-sub rewind
-{
-    my $self = shift;
-    $self->{storage}->rewind();
-}
-
-=head2 truncate
-
-=cut
-
-sub truncate
-{
-    my $self = shift;
-    $self->{storage}->truncate();
-}
+Defines if the format is able to update one single row.
 
 =head1 LICENSE AND COPYRIGHT
 

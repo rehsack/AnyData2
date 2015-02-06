@@ -42,6 +42,7 @@ sub new
     my $csv = $csv_class->new( {%options} );
     $self->{csv} = $csv;
 
+    # XXX
     $self->cols unless ( defined $csv_skip_first_row and $csv_skip_first_row );
 
     $self;
@@ -63,14 +64,14 @@ sub cols
 {
     my $self = shift;
     defined $self->{csv_cols} and return $self->{csv_cols};
-    $self->{csv_cols} = $self->read;
+    $self->{csv_cols} = $self->fetchrow;
 }
 
-=head2 read
+=head2 fetchrow
 
 =cut
 
-sub read
+sub fetchrow
 {
     my $self = shift;
     my $buf  = $self->{storage}->read();
@@ -79,11 +80,11 @@ sub read
     [ $self->{csv}->fields ];
 }
 
-=head2 write
+=head2 pushrow
 
 =cut
 
-sub write
+sub pushrow
 {
     my ( $self, $fields ) = @_;
     my $stat = $self->{csv}->combine(@$fields);

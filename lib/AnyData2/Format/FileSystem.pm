@@ -46,21 +46,21 @@ sub cols
     $self->{fs_cols};
 }
 
-=head2 read
+=head2 fetchrow
 
 =cut
 
-sub read
+sub fetchrow
 {
     my $self = shift;
     [ $self->{storage}->read() ];
 }
 
-=head2 write
+=head2 pushrow
 
 =cut
 
-sub write
+sub pushrow
 {
     confess "read-only format ...";
 }
