@@ -1,4 +1,4 @@
-package AnyData2::Role::InplaceChanging;
+package AnyData2::Role::AdvancedChanging;
 
 use 5.006;
 use strict;
@@ -8,7 +8,7 @@ use Carp qw/croak/;
 
 =head1 NAME
 
-AnyData2::Role::InplaceChanging - provides role for in-place changing capabilities
+AnyData2::Role::AdvancedChanging - provides role for in-place changing capabilities
 
 =cut
 
@@ -18,7 +18,7 @@ our $VERSION = '0.001';
 
 In fact, this role doesn't export anything. It's intended for C<< ->DOES() >>
 and documenting the reasonable methods one should implement when doing
-C<AnyData2::Role::InplaceChanging>.
+C<AnyData2::Role::AdvancedChanging>.
 
 =head2 insert_new_row
 
