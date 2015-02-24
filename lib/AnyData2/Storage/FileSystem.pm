@@ -73,7 +73,7 @@ underlying filesystem for a file storage.
 sub meta
 {
     my $self = shift;
-    $self->{meta} or $self->{meta} = AnyData2::Format::FileSystem->new( dirname => dirname( $self->{dirname} ) );
+    $self->{meta} or $self->{meta} = AnyData2::Storage::FileSystem->new( dirname => dirname( $self->{dirname} ) );
     $self->{meta};
 }
 
