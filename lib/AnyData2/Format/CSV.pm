@@ -6,7 +6,7 @@ use warnings FATAL => 'all';
 
 use base qw(AnyData2::Format AnyData2::Role::GuessImplementation);
 
-use Carp 'confess';
+use Carp 'croak';
 
 =head1 NAME
 
@@ -51,9 +51,9 @@ sub new
 sub _handle_error
 {
     my ($self, $code, $str, $pos, $rec, $fld) = @_;
-    defined $pos and defined $rec and defined $fld and confess "record $rec at line $pos in $fld - $code - $str";
-    defined $pos and defined $rec and confess "record $rec at line $pos - $code - $str";
-    confess "$code - $str";
+    defined $pos and defined $rec and defined $fld and croak "record $rec at line $pos in $fld - $code - $str";
+    defined $pos and defined $rec and croak "record $rec at line $pos - $code - $str";
+    croak "$code - $str";
 }
 
 =head2 cols

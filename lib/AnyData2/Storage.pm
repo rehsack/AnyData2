@@ -4,7 +4,7 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use Carp 'confess';
+use Carp 'croak';
 
 =head1 NAME
 
@@ -42,7 +42,7 @@ Use binmode for characters as synonymous for bytes.
 
 sub read
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
 =head2 write
@@ -55,20 +55,20 @@ Writes the buf out
 
 sub write
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
-=head2 rewind
+=head2 seek
 
-  $stor->rewind
+  $stor->seek(pos,whence)
 
-This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
+Moves the storage pointer to given position
 
 =cut
 
-sub rewind
+sub seek
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
 =head2 truncate
@@ -81,7 +81,7 @@ Truncates the underlying storage backend at it's current position.
 
 sub truncate
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
 =head2 meta
@@ -93,7 +93,7 @@ underlying filesystem for a file storage.
 
 sub meta
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
 =head1 LICENSE AND COPYRIGHT

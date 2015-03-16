@@ -70,21 +70,6 @@ sub write
     "0E0";
 }
 
-=head2 rewind
-
-  $stor->rewind
-
-This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
-
-=cut
-
-sub rewind
-{
-    my $self = shift;
-    $self->{fh}->sysseek( 0, SEEK_SET ) or die "Can't rewind $self->{filename}: $!";
-    "0E0";
-}
-
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2015 Jens Rehsack.

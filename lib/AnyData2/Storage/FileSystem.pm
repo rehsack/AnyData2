@@ -6,6 +6,7 @@ use warnings FATAL => 'all';
 
 use base qw(AnyData2::Storage);
 
+use Carp qw/croak/;
 use IO::Dir ();
 
 =head1 NAME
@@ -49,18 +50,20 @@ sub read
     $self->{dirh}->read;
 }
 
-=head2 rewind
+=head2 seek
 
-  $stor->rewind
+  $stor->seek(0,SEEK_SET)
 
-This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
+Sets the current position to the beginning of the directory (this,
+naturally, affects read only).
 
 =cut
 
-sub rewind
+sub seek
 {
-    my $self = shift;
-    $self->{dirh}->rewind;
+    my ($self, $pos, $whence) = @_;
+    $pos == 0 and $whence == 0 and return $self->{dirh}->rewind;
+    croak "Unsupported combination of POS and WHENCE";
 }
 
 =head2 meta

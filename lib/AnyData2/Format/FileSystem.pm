@@ -6,7 +6,7 @@ use warnings FATAL => 'all';
 
 use base qw(AnyData2::Format);
 
-use Carp 'confess';
+use Carp 'croak';
 use File::stat;
 
 =head1 NAME
@@ -42,7 +42,7 @@ sub new
 sub cols
 {
     my $self = shift;
-    defined $self->{fs_cols} or confess "Should not been here ...";
+    defined $self->{fs_cols} or croak "Should not been here ...";
     $self->{fs_cols};
 }
 
@@ -62,7 +62,7 @@ sub fetchrow
 
 sub pushrow
 {
-    confess "read-only format ...";
+    croak "read-only format ...";
 }
 
 =head1 LICENSE AND COPYRIGHT

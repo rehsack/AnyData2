@@ -6,6 +6,7 @@ use warnings FATAL => 'all';
 
 use base qw(AnyData2::Storage);
 
+use Carp qw/croak/;
 use Fcntl qw(:seek);
 use IO::File ();
 use Module::Runtime qw(require_module);
@@ -39,18 +40,18 @@ sub new
     $self;
 }
 
-=head2 rewind
+=head2 seek
 
-  $stor->rewind
+  $stor->seek(pos, whence)
 
-This is similar to C<< $stor->seek( 0, SEEK_SET ) >>.
+Moves the storage pointer to given position. See L<IO::Seekable> for details.
 
 =cut
 
-sub rewind
+sub seek
 {
-    my $self = shift;
-    $self->{fh}->seek( 0, SEEK_SET ) or die "Can't rewind $self->{filename}: $!";
+    my ($self, $pos, $whence) = @_;
+    $self->{fh}->seek( $pos, $whence ) or croak "Can't seek to $pos from $whence for $self->{filename}: $!";
     "0E0";
 }
 

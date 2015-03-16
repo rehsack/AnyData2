@@ -4,7 +4,7 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use Carp 'confess';
+use Carp 'croak';
 
 =head1 NAME
 
@@ -37,7 +37,7 @@ sub new
 
 sub cols
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
 =head2 fetchrow
@@ -46,7 +46,7 @@ sub cols
 
 sub fetchrow
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
 =head2 pushrow
@@ -55,17 +55,17 @@ sub fetchrow
 
 sub pushrow
 {
-    confess "missing overwritten method";
+    croak "missing overwritten method";
 }
 
-=head2 rewind
+=head2 seek
 
 =cut
 
-sub rewind
+sub seek
 {
     my $self = shift;
-    $self->{storage}->rewind();
+    $self->{storage}->seek(@_);
 }
 
 =head2 truncate
