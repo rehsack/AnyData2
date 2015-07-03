@@ -28,7 +28,7 @@ constructs a storage.
 
 sub new
 {
-    my ( $class, $storage ) = @_;
+    my ($class) = @_;
     bless {}, $class;
 }
 
