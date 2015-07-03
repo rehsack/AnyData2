@@ -32,7 +32,11 @@ my %suitable_classes;
 sub _guess_suitable_class
 {
     my ( $class, @classlist ) = @_;
-    $suitable_classes{$class} or $suitable_classes{$class} = firstval { eval { require_module($_); } } @classlist;
+    $suitable_classes{$class} or $suitable_classes{$class} = firstval
+    {
+        eval { require_module($_); }
+    }
+    @classlist;
     $suitable_classes{$class} or croak( "No suitable class out of (" . join( ", ", @classlist ) . ")for $class available" );
     $suitable_classes{$class};
 }

@@ -61,7 +61,7 @@ naturally, affects read only).
 
 sub seek
 {
-    my ($self, $pos, $whence) = @_;
+    my ( $self, $pos, $whence ) = @_;
     $pos == 0 and $whence == 0 and return $self->{dirh}->rewind;
     croak "Unsupported combination of POS and WHENCE";
 }

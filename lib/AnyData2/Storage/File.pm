@@ -33,7 +33,7 @@ sub new
 {
     my ( $class, %options ) = @_;
     my $self = $class->SUPER::new();
-    defined $options{filemode} or $options{filemode} = "r";
+    defined $options{filemode}  or $options{filemode}  = "r";
     defined $options{fileperms} or $options{fileperms} = 0644;
     $self->{fh} = IO::File->new( @options{qw(filename filemode fileperms)} ) or die "Can't open $options{filename}: $!";
     @$self{qw(filename filemode fileperms)} = @options{qw(filename filemode fileperms)};
@@ -50,7 +50,7 @@ Moves the storage pointer to given position. See L<IO::Seekable> for details.
 
 sub seek
 {
-    my ($self, $pos, $whence) = @_;
+    my ( $self, $pos, $whence ) = @_;
     $self->{fh}->seek( $pos, $whence ) or croak "Can't seek to $pos from $whence for $self->{filename}: $!";
     "0E0";
 }

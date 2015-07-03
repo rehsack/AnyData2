@@ -30,7 +30,7 @@ sub new
     my ( $class, $storage, %options ) = @_;
     my $self = $class->SUPER::new($storage);
 
-    $self->{fs_cols} = [ qw(dev ino mode nlink uid gid rdev size atime mtime ctime blksize blocks) ];
+    $self->{fs_cols} = [qw(dev ino mode nlink uid gid rdev size atime mtime ctime blksize blocks)];
 
     $self;
 }
