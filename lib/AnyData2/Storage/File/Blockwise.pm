@@ -1,6 +1,6 @@
 package AnyData2::Storage::File::Blockwise;
 
-use 5.006;
+use 5.008001;
 use strict;
 use warnings FATAL => 'all';
 
