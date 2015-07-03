@@ -33,7 +33,6 @@ while ( my $row = $af->fetchrow )
 }
 
 is_deeply( $cols, [qw(Id Name Color)], "Cols from csv" );
-
 is_deeply( \@rows, [ [ "1", "red", "#ff0000" ], [ "2", "green", "#00ff00" ], [ "3", "blue", "#0000ff" ] ], "Rows from csv" );
 
 done_testing;
