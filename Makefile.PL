@@ -16,9 +16,8 @@ my %CONFIGURE_DEPS = (
 my %BUILD_DEPS = ();
 
 my %TEST_DEPS = (
-    'Test::More'   => 0.90,
-    'Text::CSV_XS' => 0,
-    'IO::File'     => 0,
+    'Test::More' => 0.90,
+    'IO::File'   => 0,
 );
 
 WriteMakefile1(
@@ -33,7 +32,7 @@ WriteMakefile1(
             },
             bugtracker => {
                 web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name=AnyData2',
-                mailto => 'bug-anydata2@rt.cpan.org',
+                mailto => 'bug-AnyData2@rt.cpan.org',
             },
             license => 'http://dev.perl.org/licenses/',
         },
@@ -50,33 +49,32 @@ WriteMakefile1(
                     'Test::Spelling'                      => 0,
                 },
             },
-            configure => {
-                requires => {%CONFIGURE_DEPS},
-            },
-            build   => { requires => {%BUILD_DEPS} },
-            test    => { requires => {%TEST_DEPS} },
-            runtime => {
+            configure => { requires => {%CONFIGURE_DEPS} },
+            build     => { requires => {%BUILD_DEPS} },
+            test      => {
                 recommends => {
-                    'Text::CSV'    => 0,
-                    'Text::CSV_XS' => 0,
-                    'IO::File'     => 0,
+                    'HTML::TableExtract' => 0,
+                    'Text::CSV'          => 0,
+                    'Text::CSV_XS'       => 0,
                 },
-                requires => { %RUN_DEPS, },
+                requires => {%TEST_DEPS}
             },
+            runtime => { requires => {%RUN_DEPS} },
         },
     },
-    NAME             => 'AnyData2',
-    AUTHOR           => q{Jens Rehsack <rehsack@cpan.org>},
-    VERSION_FROM     => 'lib/AnyData2.pm',
-    ABSTRACT_FROM    => 'lib/AnyData2.pm',
-    LICENSE          => 'perl',
-    PL_FILES         => {},
-    MIN_PERL_VERSION => 5.006,
-    PREREQ_PM        => \%RUN_DEPS,
-    BUILD_REQUIRES   => \%BUILD_DEPS,
-    TEST_REQUIRES    => \%TEST_DEPS,
-    test             => { TESTS => 't/*.t xt/*.t' },
-    dist             => {
+    NAME               => 'AnyData2',
+    AUTHOR             => q{Jens Rehsack <rehsack@cpan.org>},
+    VERSION_FROM       => 'lib/AnyData2.pm',
+    ABSTRACT_FROM      => 'lib/AnyData2.pm',
+    LICENSE            => 'perl',
+    PL_FILES           => {},
+    MIN_PERL_VERSION   => 5.008001,
+    PREREQ_PM          => \%RUN_DEPS,
+    BUILD_REQUIRES     => \%BUILD_DEPS,
+    CONFIGURE_REQUIRES => \%CONFIGURE_DEPS,
+    TEST_REQUIRES      => \%TEST_DEPS,
+    test               => { TESTS => 't/*.t xt/*.t' },
+    dist               => {
         COMPRESS => 'gzip -9f',
         SUFFIX   => 'gz',
     },
