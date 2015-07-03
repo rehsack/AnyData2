@@ -31,8 +31,10 @@ Use binmode for characters as synonymous for bytes.
 sub read
 {
     my $self = shift;
-    my $buf  = $self->{fh}->getline;
-    defined $buf or die "Can't read from $self->{filename}: $!";
+    $self->{fh}->clearerr;
+    my $buf = $self->{fh}->getline;
+    $self->{fh}->error and die "Can't read from $self->{filename}: $!";
+    defined $buf or return;
     chomp $buf;
     $buf;
 }

@@ -34,7 +34,7 @@ sub new
     my ( $class, $storage, %options ) = @_;
     my $self = $class->SUPER::new($storage);
 
-    my $csv_class = delete $options{csv_class};
+    my $csv_class          = delete $options{csv_class};
     my $csv_skip_first_row = delete $options{csv_skip_first_row};
 
     defined $csv_class or $csv_class = $class->_guess_suitable_class(qw(Text::CSV_XS Text::CSV));
@@ -50,7 +50,7 @@ sub new
 
 sub _handle_error
 {
-    my ($self, $code, $str, $pos, $rec, $fld) = @_;
+    my ( $self, $code, $str, $pos, $rec, $fld ) = @_;
     defined $pos and defined $rec and defined $fld and croak "record $rec at line $pos in $fld - $code - $str";
     defined $pos and defined $rec and croak "record $rec at line $pos - $code - $str";
     croak "$code - $str";
@@ -75,6 +75,7 @@ sub fetchrow
 {
     my $self = shift;
     my $buf  = $self->{storage}->read();
+    defined $buf or return;
     my $stat = $self->{csv}->parse($buf);
     $stat or return $self->_handle_error( $self->{csv}->error_diag );
     [ $self->{csv}->fields ];
