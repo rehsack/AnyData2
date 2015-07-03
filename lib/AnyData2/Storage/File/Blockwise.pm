@@ -49,6 +49,7 @@ sub read
     my $buf;
     my $rc = $self->{fh}->sysread( $buf, $self->{blocksize} );
     defined $rc or die "Error reading from $$self->{filename}: $!";
+    $rc or return;
     $rc > 0 and $rc < $self->{blocksize} and die "Read only $rc bytes from $self->{filename} instead of $self->{blocksize}";
     $buf;
 }

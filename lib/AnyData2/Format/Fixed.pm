@@ -1,19 +1,19 @@
-package AnyData2::Storage::File;
+package AnyData2::Format::Fixed;
 
-use 5.006;
+use 5.008;
 use strict;
 use warnings FATAL => 'all';
 
-use base qw(AnyData2::Storage);
+use base qw(AnyData2::Format AnyData2::Role::GuessImplementation);
 
 use Carp qw/croak/;
-use Fcntl qw(:seek);
-use IO::File ();
+use List::Util '1.29', qw(pairkeys pairvalues);
+use List::MoreUtils qw(firstval);
 use Module::Runtime qw(require_module);
 
 =head1 NAME
 
-AnyData2::Storage::File - AnyData2 file storage ...
+AnyData2::Format::CSV - Format base class for AnyData2
 
 =cut
 
@@ -21,78 +21,59 @@ our $VERSION = '0.001';
 
 =head1 METHODS
 
-...
-
 =head2 new
 
-constructs a storage.
+constructs a storage, passes all options down to C<html_table_class>
+beside C<html_table_class>, which is used to instantiate the parser.
+C<html_table_class> prefers L<HTML::TableExtract> by default.
 
 =cut
 
 sub new
 {
-    my ( $class, %options ) = @_;
-    my $self = $class->SUPER::new();
-    defined $options{filemode} or $options{filemode} = "r";
-    my @openparms = qw(filename filemode);
-    unless ( $options{filemode} =~ m/^[<>]/ )
-    {
-        defined $options{fileperms} or $options{fileperms} = 0644;
-        push @openparms, qw(fileperms);
-    }
-    $self->{fh} = IO::File->new( @options{@openparms} ) or die "Can't open $options{filename}: $!";
-    @$self{qw(filename filemode fileperms)} = @options{qw(filename filemode fileperms)};
+    my ( $class, $storage, %options ) = @_;
+    my $self = $class->SUPER::new($storage);
+
+    $self->{cols} = [ @{ delete $options{cols} } ];
+
     $self;
 }
 
-=head2 seek
-
-  $stor->seek(pos, whence)
-
-Moves the storage pointer to given position. See L<IO::Seekable> for details.
+=head2 cols
 
 =cut
 
-sub seek
+sub cols
 {
-    my ( $self, $pos, $whence ) = @_;
-    $self->{fh}->seek( $pos, $whence ) or croak "Can't seek to $pos from $whence for $self->{filename}: $!";
-    "0E0";
+    my $self = shift;
+    [ pairkeys @{ $self->{cols} } ];
 }
 
-=head2 truncate
-
-  $stor->truncate
-
-Truncates the underlying storage backend at it's current position.
+=head2 fetchrow
 
 =cut
 
-sub truncate
+sub fetchrow
 {
     my $self = shift;
-    $self->{fh}->truncate( $self->{fh}->tell() ) or die "Can't truncate $self->{filename}: $!";
+    my $buf  = $self->{storage}->read();
+    defined $buf or return;
+    my @data;
+    foreach my $len ( pairvalues @{ $self->{cols} } )
+    {
+        push @data, substr $buf, 0, $len, "";
+    }
+    \@data;
 }
 
-=head2 meta
-
-Returns a meta storage - if any. Imaging it as an object dealing with
-underlying filesystem for a file storage.
+=head2 pushrow
 
 =cut
 
-sub _build_meta
+sub pushrow
 {
-    my $self = shift;
-    require_module("AnyData2::Format::FileSystem");
-    AnyData2::Format::FileSystem->new( dirname => dirname( $self->{filename} ) );
-}
-
-sub meta
-{
-    my $self = shift;
-    $self->{meta} or $self->{meta} = $self->_build_meta;
-    $self->{meta};
+    my ( $self, $fields ) = @_;
+    ...;
 }
 
 =head1 LICENSE AND COPYRIGHT

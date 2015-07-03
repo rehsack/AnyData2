@@ -54,12 +54,19 @@ WriteMakefile1(
             test      => {
                 recommends => {
                     'HTML::TableExtract' => 0,
+                    'List::Util'         => '1.29',
                     'Text::CSV'          => 0,
                     'Text::CSV_XS'       => 0,
                 },
                 requires => {%TEST_DEPS}
             },
-            runtime => { requires => {%RUN_DEPS} },
+            runtime => {
+                suggests => {
+                    'List::Util'   => '1.29',
+                    'Text::CSV_XS' => 0,
+                },
+                requires => {%RUN_DEPS},
+            },
         },
     },
     NAME               => 'AnyData2',
