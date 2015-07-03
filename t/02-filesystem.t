@@ -24,4 +24,17 @@ my $af = AnyData2->new(
     "FileSystem" => { dirname => File::Spec->catfile($test_dir) }
 );
 
+my $cols = $af->cols;
+my @rows;
+
+while ( my $row = $af->fetchrow )
+{
+    push @rows, $row;
+}
+
+my @stripped_rows = map { [ $_->[0] ] } @rows;
+
+is_deeply( $cols, [qw(entry dev ino mode nlink uid gid rdev size atime mtime ctime blksize blocks)], "Cols from filesystem" );
+is_deeply( \@stripped_rows, [ ["."], [".."], ["simple.csv"] ], "Rows from filesystem" );
+
 done_testing;

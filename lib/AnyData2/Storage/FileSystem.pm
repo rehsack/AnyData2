@@ -46,8 +46,9 @@ Use binmode for characters as synonymous for bytes.
 
 sub read
 {
-    my $self = shift;
-    $self->{dirh}->read;
+    my $self  = shift;
+    my $entry = $self->{dirh}->read;
+    $entry;
 }
 
 =head2 seek

@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 use base qw(AnyData2::Format);
 
 use Carp 'croak';
-use File::stat;
+use File::Spec ();
 
 =head1 NAME
 
@@ -30,7 +30,7 @@ sub new
     my ( $class, $storage, %options ) = @_;
     my $self = $class->SUPER::new($storage);
 
-    $self->{fs_cols} = [qw(dev ino mode nlink uid gid rdev size atime mtime ctime blksize blocks)];
+    $self->{fs_cols} = [qw(entry dev ino mode nlink uid gid rdev size atime mtime ctime blksize blocks)];
 
     $self;
 }
@@ -52,8 +52,11 @@ sub cols
 
 sub fetchrow
 {
-    my $self = shift;
-    [ $self->{storage}->read() ];
+    my $self  = shift;
+    my $entry = $self->{storage}->read();
+    defined $entry or return;
+    my $fqpn = File::Spec->catfile( $self->{storage}->{dirname}, $entry );
+    [ $entry, stat $fqpn ];
 }
 
 =head2 pushrow
