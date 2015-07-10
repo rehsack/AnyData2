@@ -53,7 +53,6 @@ WriteMakefile1(
             build     => { requires => {%BUILD_DEPS} },
             test      => {
                 recommends => {
-                    'HTML::TableExtract' => 0,
                     'List::Util'         => '1.29',
                     'Text::CSV'          => 0,
                     'Text::CSV_XS'       => 0,
