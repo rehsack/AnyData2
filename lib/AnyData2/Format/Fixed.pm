@@ -16,7 +16,7 @@ AnyData2::Format::Fixed - fixed length format class for AnyData2
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 METHODS
 

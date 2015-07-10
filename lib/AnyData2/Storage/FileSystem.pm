@@ -15,7 +15,7 @@ AnyData2::Storage::FileSystem - AnyData2 filesystem storage ...
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 METHODS
 

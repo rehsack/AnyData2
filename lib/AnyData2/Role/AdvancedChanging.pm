@@ -12,7 +12,7 @@ AnyData2::Role::AdvancedChanging - provides role for in-place changing capabilit
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 METHODS
 

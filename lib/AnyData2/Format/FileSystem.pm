@@ -15,7 +15,7 @@ AnyData2::Format::FileSystem - FileSystem format class for AnyData2
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 METHODS
 

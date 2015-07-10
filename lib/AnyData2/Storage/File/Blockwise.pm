@@ -15,7 +15,7 @@ AnyData2::Storage::File::Blockwise - AnyData2 block oriented file storage
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 METHODS
 

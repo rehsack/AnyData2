@@ -12,7 +12,7 @@ AnyData2::Storage - AnyData2 storage base class
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 METHODS
 

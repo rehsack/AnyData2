@@ -12,7 +12,7 @@ AnyData2 - access to data in many formats
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 SYNOPSIS
 

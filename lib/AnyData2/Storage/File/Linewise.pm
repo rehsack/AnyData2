@@ -14,7 +14,7 @@ AnyData2::Storage::File::Linewise - AnyData2 line oriented file storage
 
 =cut
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 METHODS
 
