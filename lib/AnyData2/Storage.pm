@@ -86,6 +86,8 @@ sub truncate
 
 =head2 meta
 
+Experimental
+
 Returns a meta storage - if any. Imaging it as an object dealing with
 underlying filesystem for a file storage.
 

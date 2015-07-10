@@ -21,7 +21,11 @@ AnyData2.
 
 =head2 new
 
-constructs a storage.
+  my $af = AnyData2::Format->new( $storage )
+
+constructs a format
+
+Derived classes shall handle their options...
 
 =cut
 
@@ -33,6 +37,8 @@ sub new
 
 =head2 cols
 
+delivers the columns
+
 =cut
 
 sub cols
@@ -41,6 +47,8 @@ sub cols
 }
 
 =head2 fetchrow
+
+fetches one row
 
 =cut
 
@@ -51,6 +59,8 @@ sub fetchrow
 
 =head2 pushrow
 
+pushes one row
+
 =cut
 
 sub pushrow
@@ -59,6 +69,8 @@ sub pushrow
 }
 
 =head2 seek
+
+move storage file pointer (use with caution)
 
 =cut
 
@@ -69,6 +81,8 @@ sub seek
 }
 
 =head2 truncate
+
+truncates storage here
 
 =cut
 

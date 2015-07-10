@@ -20,6 +20,11 @@ our $VERSION = '0.001';
 
 =head2 new
 
+  my $af = AnyData2->new(
+    CSV              => {},
+    "File::Linewise" => { filename => File::Spec->catfile( $test_dir, "simple.csv" ) }
+  );
+
 constructs a CSV accessor, passes all options down to C<csv_class> beside
 C<csv_class>, C<csv_cols> and C<csv_skip_first_row>. C<csv_class> is used
 to instantiate the parser and prefers L<Text::CSV_XS> over L<Text::CSV>
@@ -58,6 +63,8 @@ sub _handle_error
 
 =head2 cols
 
+Deliver the columns of the CSV ...
+
 =cut
 
 sub cols
@@ -68,6 +75,8 @@ sub cols
 }
 
 =head2 fetchrow
+
+Parses a line read from storage and return the result
 
 =cut
 
@@ -82,6 +91,8 @@ sub fetchrow
 }
 
 =head2 pushrow
+
+Encodes values and write to storage
 
 =cut
 

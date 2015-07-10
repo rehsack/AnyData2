@@ -8,7 +8,6 @@ use base qw(AnyData2::Format AnyData2::Role::GuessImplementation);
 
 use Carp qw/croak/;
 use List::Util '1.29', qw(pairkeys pairvalues);
-use List::MoreUtils qw(firstval);
 use Module::Runtime qw(require_module);
 
 =head1 NAME
@@ -22,6 +21,28 @@ our $VERSION = '0.001';
 =head1 METHODS
 
 =head2 new
+
+  # pure invocation
+  my $af = AnyData2::Format::Fixed->new(
+    $storage,
+    cols => [ # important: hash changes order!
+      "first" => 20,
+      "second" => 15,
+      ...
+    ]
+  );
+  
+  my $af = AnyData2->new(
+    Fixed => {
+        cols => [ Id => 3, Name => 10, Color => 7, Newline => 1 ]
+    },
+    # a File::Linewise example should do, either
+    "File::Blockwise" => {
+        filename  => File::Spec->catfile( $test_dir, "simple.blocks" ),
+        blocksize => 3 + 10 + 7 + 1,
+        filemode  => "<:raw"
+    }
+  );
 
 constructs a storage, passes all options down to C<html_table_class>
 beside C<html_table_class>, which is used to instantiate the parser.
@@ -41,6 +62,8 @@ sub new
 
 =head2 cols
 
+Deliver the keys of the specification array
+
 =cut
 
 sub cols
@@ -50,6 +73,8 @@ sub cols
 }
 
 =head2 fetchrow
+
+Extract the values from storages based on the values of the specification array
 
 =cut
 
@@ -67,6 +92,8 @@ sub fetchrow
 }
 
 =head2 pushrow
+
+Construct buffer based on the values of the specification array and write it into storage (unimplemented)
 
 =cut
 

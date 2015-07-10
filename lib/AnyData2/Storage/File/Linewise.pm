@@ -10,15 +10,13 @@ use IO::File ();
 
 =head1 NAME
 
-AnyData2::Storage::File::Linewise - AnyData2 file storage ...
+AnyData2::Storage::File::Linewise - AnyData2 line oriented file storage
 
 =cut
 
 our $VERSION = '0.001';
 
 =head1 METHODS
-
-...
 
 =head2 read
 

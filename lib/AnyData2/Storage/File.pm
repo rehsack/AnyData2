@@ -13,17 +13,30 @@ use Module::Runtime qw(require_module);
 
 =head1 NAME
 
-AnyData2::Storage::File - AnyData2 file storage ...
+AnyData2::Storage::File - AnyData2 file storage
 
 =cut
 
 our $VERSION = '0.001';
 
+=head1 DESCRIPTION
+
+Base class for L<AnyData2::Storage::File::Linewise> and L<AnyData2::Storage::File::Blockwise> to handle common stuff
+
 =head1 METHODS
 
-...
-
 =head2 new
+
+  my $as2 = AnyData2::Storage::File->new(
+    filename => "data.ext",
+    filemode => "r",
+    fileperms => 0644
+  );
+
+  my $as2 = AnyData2::Storage::File->new(
+    filename => "data.ext",
+    filemode => "<:raw"
+  );
 
 constructs a storage.
 
@@ -75,6 +88,8 @@ sub truncate
 }
 
 =head2 meta
+
+Experimental
 
 Returns a meta storage - if any. Imaging it as an object dealing with
 underlying filesystem for a file storage.

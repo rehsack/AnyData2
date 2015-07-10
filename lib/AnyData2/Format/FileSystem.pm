@@ -21,6 +21,11 @@ our $VERSION = '0.001';
 
 =head2 new
 
+  # pure
+  my $af = AnyData2::Format::FileSystem->new(
+    AnyData2::Storage::FileSystem->new( dirname => $ENV{HOME} )
+  );
+
 constructs a filesystem format
 
 =cut
@@ -37,6 +42,8 @@ sub new
 
 =head2 cols
 
+Return column names
+
 =cut
 
 sub cols
@@ -47,6 +54,8 @@ sub cols
 }
 
 =head2 fetchrow
+
+Fetch next directory entry and return name and stat values
 
 =cut
 
@@ -60,6 +69,8 @@ sub fetchrow
 }
 
 =head2 pushrow
+
+No idea how this can be reasonable implemented
 
 =cut
 

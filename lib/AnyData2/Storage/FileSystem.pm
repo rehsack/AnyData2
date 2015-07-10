@@ -11,7 +11,7 @@ use IO::Dir ();
 
 =head1 NAME
 
-AnyData2::Storage::FileSystem - AnyData2 file storage ...
+AnyData2::Storage::FileSystem - AnyData2 filesystem storage ...
 
 =cut
 
@@ -19,11 +19,9 @@ our $VERSION = '0.001';
 
 =head1 METHODS
 
-...
-
 =head2 new
 
-constructs a storage.
+constructs a storage reading entries from filesystem
 
 =cut
 
@@ -38,7 +36,7 @@ sub new
 
 =head2 read
 
-  my $buf = $stor->read(<characters>)
+  my $entry = $stor->read
 
 Use binmode for characters as synonymous for bytes.
 
@@ -68,6 +66,8 @@ sub seek
 }
 
 =head2 meta
+
+Experimental
 
 Returns a meta storage - if any. Imaging it as an object dealing with
 underlying filesystem for a file storage.

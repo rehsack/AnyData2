@@ -11,7 +11,7 @@ use IO::File ();
 
 =head1 NAME
 
-AnyData2::Storage::File::Blockwise - AnyData2 file storage ...
+AnyData2::Storage::File::Blockwise - AnyData2 block oriented file storage
 
 =cut
 
@@ -19,9 +19,13 @@ our $VERSION = '0.001';
 
 =head1 METHODS
 
-...
-
 =head2 new
+
+  my $as2 = AnyData2::Storage::File::Blockwise->new(
+    filename  => "data.ext",
+    filemode  => "<:raw",
+    blocksize => 512
+  );
 
 constructs a storage.
 
