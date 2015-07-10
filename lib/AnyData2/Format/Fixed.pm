@@ -13,7 +13,7 @@ use Module::Runtime qw(require_module);
 
 =head1 NAME
 
-AnyData2::Format::CSV - Format base class for AnyData2
+AnyData2::Format::Fixed - fixed length format class for AnyData2
 
 =cut
 
@@ -73,7 +73,7 @@ sub fetchrow
 sub pushrow
 {
     my ( $self, $fields ) = @_;
-    ...;
+    croak "Write support unimplemented. Patches welcome!";
 }
 
 =head1 LICENSE AND COPYRIGHT
