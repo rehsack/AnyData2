@@ -87,6 +87,21 @@ sub truncate
     $self->{fh}->truncate( $self->{fh}->tell() ) or die "Can't truncate $self->{filename}: $!";
 }
 
+=head2 drop
+
+  $stor->drop
+
+Drops the underlying storage (e.g. delete file)
+
+=cut
+
+sub drop
+{
+    my $self = shift;
+    $self->{fh} and $self->{fh}->close;
+    unlink $self->{filename};
+}
+
 =head2 meta
 
 Experimental

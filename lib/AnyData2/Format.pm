@@ -92,6 +92,18 @@ sub truncate
     $self->{storage}->truncate();
 }
 
+=head2 drop
+
+drops storage here
+
+=cut
+
+sub drop
+{
+    my $self = shift;
+    $self->{storage}->drop();
+}
+
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2015 Jens Rehsack.

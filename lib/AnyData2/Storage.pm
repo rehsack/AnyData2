@@ -84,6 +84,19 @@ sub truncate
     croak "missing overwritten method";
 }
 
+=head2 drop
+
+  $stor->drop
+
+Drops the underlying storage (e.g. delete file)
+
+=cut
+
+sub drop
+{
+    croak "missing overwritten method";
+}
+
 =head2 meta
 
 Experimental
